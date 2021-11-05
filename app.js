@@ -107,7 +107,6 @@ app.use((req, res, next) => {
 //AUTHENTICATION ROUTES
 /**********************/
 app.get('/signup', (req, res) => {
-
     City.find({},function(err, all)
     {
         if(err)
@@ -122,8 +121,7 @@ app.get('/signup', (req, res) => {
 //         req.body.image.length=(String)("https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png");
 //     }
 //     //currently working here
-//   //  var currentcity=req.body.city;
-//    // var lat1, long1;
+//   //  
 //     // City.findOne({cityname:req.body.city},function(err,returnedcity)
 //     // {
 //     //     if(err){
@@ -154,7 +152,19 @@ app.post('/signup', (req, res) => {
         req.body.image.length=(String)("https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png");
     }
    //currently working here
-    var newUser = new User({username: req.body.username, fullname: req.body.name, points:0,city: req.body.city,/*latitude:, longitude:,*/ profile:req.body.image});
+   var currentcity=req.body.city;
+   var lat1, long1;
+   City.findOne({cityname:currentcity},function(err,returnedcity)
+    {
+        if(err){
+            res.send("error");
+            return res.redirect("/");
+        }
+        console.log(returnedcity.latitude);
+        lat1=(returnedcity.latitude);
+        long1=(returnedcity.longitude);
+    })
+    var newUser = new User({username: req.body.username, fullname: req.body.name, points:0,city: req.body.city,latitude1:lat1, longitude1:long1, profile:req.body.image});
     // console.log(req.body.city);
     User.register(newUser, req.body.password, (err, user) => {
         if(err){
@@ -229,7 +239,7 @@ app.post("/addpoints", (req, res)=>{
         {
             if(user)
             {
-                user.visited.push(req.body.uniquename);
+                user.purchased.push(req.body.uniquename);
                 user.points=(Number)(user.points)+(Number)(req.body.points);
                 console.log(req.body.points);
                 user.save(function()
