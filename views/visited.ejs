@@ -1,14 +1,14 @@
 <%- include("partials/header1") %>
 
-<% if(currentUser.visited.includes(data.returned.uniquename)){%>
+<% if(currentUser.purchased.includes(data.returned.uniquename)){%>
     <div class="container ">
-        <div><h1 ><%=data.returned.namelocation%></h1></div>
+        <div><h1 ><%=data.returned.productname%></h1></div>
         <div class="row d-flex justify-content-center">
             <img  class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" src="<%=data.returned.image%>">
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                 
-                <div><h4 id="destlat"><%=data.returned.namelocation%>'s LATITUDE : <%=data.returned.latitude%></h4></div>
-                <div><h4 id="destlong"><%=data.returned.namelocation%>'s LONGITUDE : <%=data.returned.longitude%></h4></div>
+               <!--<div><h4 id="destlat"><%=data.returned.productname%>'s LATITUDE : <%=data.returned.latitude%></h4></div>
+                <div><h4 id="destlong"><%=data.returned.productname%>'s LONGITUDE : <%=data.returned.longitude%></h4></div>-->
                 <div><h4 id="mylatitude">Your LATITUDE : <%=data.mylatitude%></h4></div>
                 <div><h4 id="mylongitude">Your LONGITUDE : <%=data.mylongitude%></h4></div>
                 <div><h4 id="distance">Your DISTANCE  : <%=data.distance%></h4></div>
@@ -21,14 +21,12 @@
     <%} else {%>
         
         <div class="container ">
-            <div><h1 ><%=data.returned.namelocation%></h1></div>
+            <div><h1 ><%=data.returned.productname%></h1></div>
             <div class="row d-flex justify-content-center">
                 <img style="width:350 px;height:150 px;" class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" src="<%=data.returned.image%>">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    
-                    <div><h4 id="destlat"><%=data.returned.namelocation%>'s LATITUDE : <%=data.returned.latitude%></h4></div>
-                    <div><h4 id="destlong"><%=data.returned.namelocation%>'s LONGITUDE : <%=data.returned.longitude%></h4></div>
-                    
+                    <!--<div><h4 id="destlat"><%=data.returned.namelocation%>'s LATITUDE : <%=data.returned.latitude%></h4></div>
+                    <div><h4 id="destlong"><%=data.returned.namelocation%>'s LONGITUDE : <%=data.returned.longitude%></h4></div>-->
                     <div><h4 class="text-center">Congo!! You are eligible to grab points!!</h4></div>
                 </div>
             </div>
