@@ -23,19 +23,34 @@ db.once('open', ()=>{
 })
 
 /******************/
-//DESTINATION MODEL
+//PRODUCT MODEL
 /******************/
-var destinationSchema= new mongoose.Schema({
-    namelocation:String,
+/*old- destinationSchema*/
+var productSchema= new mongoose.Schema({
+    /*namelocation*/ 
+    productname:String,
+    category:String,
+    brand:String,
+    price:Number,
     uniquename:{type:String,unique:true}, 
-    city:String, 
-    state:String,
+    //city:String, 
+    //state:String,
     image:String,
-    latitude:Number,
-    longitude:Number,
+    //latitude:Number,
+    //longitude:Number,
     points:Number
 });
-var Destination=mongoose.model("Destination", destinationSchema);   
+//Destination               Destination
+var Product=mongoose.model("Product", productSchema);  
+/******************/
+//CITY MODEL
+/******************/
+var citySchema=new mongoose.Schema({
+    cityname:String,
+    latitutde:Number,
+    longitude:Number
+})
+var City=mongoose.model("City", citySchema);
 /******************/
 //USER MODEL
 /******************/  
@@ -45,11 +60,15 @@ var UserSchema = new mongoose.Schema({
     password:String,
     profile:String,
     points:Number,
-    bucketlist:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Destination"
-    }],
-    visited:[String]
+    city:String,
+    // latitude:Number,
+    // longitude:Number,
+    // bucketlist:[{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Destination"
+    // }],
+    //visited
+    purchased:[String]
 }, {
     timestamps: true
 })
@@ -89,14 +108,26 @@ app.use((req, res, next) => {
 /**********************/
 app.get('/signup', (req, res) => {
 
-    res.render("signup"); 
+    City.find({},function(err, all)
+    {
+        if(err)
+        res.send("Error");
+        else
+        res.render("signup.ejs", {cities:all});
+    });
 })
 app.post('/signup', (req, res) => {
     if(req.body.image.length==0)
     {
         req.body.image.length=(String)("https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png");
     }
-    var newUser = new User({username: req.body.username, fullname: req.body.name, points:0, profile:req.body.image});
+
+
+
+
+    //currently working here
+    var newUser = new User({username: req.body.username, fullname: req.body.name, points:0,city:req.body.city,/*latitude:, longitude:,*/ profile:req.body.image});
+    console.log(req.body.city);
     User.register(newUser, req.body.password, (err, user) => {
         if(err){
             console.log(err);
@@ -130,14 +161,14 @@ app.get('/logout', (req, res)=> {
 app.get('/', (req, res) => {
     res.render("landing.ejs");
 })
-app.get("/destinations", function(req, res)
+app.get("/products", function(req, res)
 {
-    Destination.find({},function(err, all)
+    Product.find({},function(err, all)
     {
         if(err)
         res.send("Error");
         else
-        res.render("list.ejs", {destinations:all});
+        res.render("list.ejs", {products:all});
     });
 });
 app.get('/detect', isLoggedIn , (req, res) => {
@@ -150,7 +181,7 @@ app.get('/detect', isLoggedIn , (req, res) => {
     });
 })
 app.post("/detect", (req, res)=>{
-    Destination.findOne({uniquename:req.body.uniquename},function(err, returned)
+    Product.findOne({uniquename:req.body.uniquename},function(err, returned)
     {
         if(err){
             res.send("error");
@@ -175,7 +206,7 @@ app.post("/addpoints", (req, res)=>{
                 console.log(req.body.points);
                 user.save(function()
                 {
-                    Destination.findOne({uniquename:req.body.uniquename},function(err, returned)
+                    Product.findOne({uniquename:req.body.uniquename},function(err, returned)
                     {
                         if(err){
                                     res.send("error");
@@ -215,7 +246,7 @@ app.get("/profile/:username", function(req,res){
 });
 app.get("/check/:uniquename", isLoggedIn, function(req, res)
 {
-    Destination.findOne({uniquename:req.params.uniquename},function(err, returned)
+    Product.findOne({uniquename:req.params.uniquename},function(err, returned)
     {
         if(err){
             res.send("error");
@@ -225,49 +256,49 @@ app.get("/check/:uniquename", isLoggedIn, function(req, res)
     });
 
 });
-/*app.get("/addnew", function(req, res)
+app.get("/addnew", function(req, res)
 {
     res.render("addnew.ejs");
-});*/
-/*app.post('/destinations', (req, res)=> {
+});
+//destinations
+// app.post('/products', (req, res)=> {
 
-    var location=req.body.name;
-    var city=req.body.city;
-    var state=req.body.state;
-    var image=req.body.image;
-    var points=req.body.points;
-    var latitude=req.body.latitude;
-    var longitude=req.body.longitude;
-    var uniquename=req.body.uniquename;
-
-    var newDestination = new Destination({
-        namelocation:location, 
-        city:city, 
-        state:state, 
-        image:image, 
-        points:points, 
-        latitude:latitude, 
-        longitude:longitude, 
-        uniquename:uniquename
-    });
-
-    newDestination.save((err, returned)=> {
-        if(err){
-            res.send(err);
-        } else{
-            res.redirect("/destinations");
-        }
-    })
-
-});*/
-app.get("/destinations/:uniquename", function(req, res)
+//     //var location=req.body.name;
+//    // var city=req.body.city;
+//    // var state=req.body.state;
+//    var productname=req.body.productname;
+//     var image=req.body.image;
+//     var points=req.body.points;
+//     //var latitude=req.body.latitude;
+//     //var longitude=req.body.longitude;
+//     var uniquename=req.body.uniquename;
+//     var newProduct = new Product({
+//         //namelocation:location, 
+//         productname=productname,
+//        // city:city, 
+//         //state:state, 
+//         image:image, 
+//         points:points, 
+//         //latitude:latitude, 
+//         //longitude:longitude, 
+//         uniquename:uniquename
+//     });
+    // newProduct.save((err, returned)=> {
+    //     if(err){
+    //         res.send(err);
+    //     } else{
+    //         res.redirect("/products");
+    //     }
+    // })
+//});
+app.get("/products/:uniquename", function(req, res)
 {
-    Destination.findOne({uniquename:req.params.uniquename}, function(err, Place)
+    Product.findOne({uniquename:req.params.uniquename}, function(err, Pro)
     {
         if(err)
         res.send("Error");
         else
-        res.render("showmore", {place:Place});
+        res.render("showmore", {place:Pro});
     });
 });
 app.get("/leaderboard", function(req, res)

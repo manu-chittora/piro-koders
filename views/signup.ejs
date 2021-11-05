@@ -33,7 +33,19 @@
               <input name="image" value="https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png" type="url" class="form-control" id="exampleInputImage"  placeholder="Enter URL (Ex-Google Drive Link)" required>
             </div>
         </div>
-
+        <div class="row d-flex justify-content-center">
+            <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                <label for="exampleCity">City*</label>
+                <select name="city" type="text" class="form-control form-select form-select-lg mb-3" id="exampleCity"aria-label=".form-select-lg example" required>
+                    <option selected>City</option>
+                    <%cities.forEach(function(city){%>
+                        <option value="1">
+                        <%=city.cityname%>
+                        </option>
+                    <%});%>
+                </select>
+            </div>
+        </div>
         <div class="row d-flex justify-content-start"></div>
 
           <div class="row d-flex justify-content-center">
