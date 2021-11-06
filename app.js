@@ -21,33 +21,25 @@ db.on('error', console.error.bind(console, 'connection error: '));
 db.once('open', ()=>{
     console.log("Connected to db");
 })
-
 /******************/
 //PRODUCT MODEL
 /******************/
-/*old- destinationSchema*/
 var productSchema= new mongoose.Schema({
-    /*namelocation*/ 
     productname:String,
     category:String,
     brand:String,
     price:Number,
     uniquename:{type:String,unique:true}, 
-    //city:String, 
-    //state:String,
     image:String,
-    //latitude:Number,
-    //longitude:Number,
     points:Number
 });
-//Destination               Destination
 var Product=mongoose.model("Product", productSchema);  
 /******************/
 //CITY MODEL
 /******************/
 var citySchema=new mongoose.Schema({
     cityname:String,
-    latitutde:Number,
+    latitude:Number,
     longitude:Number
 })
 var City=mongoose.model("City", citySchema);
@@ -63,11 +55,6 @@ var UserSchema = new mongoose.Schema({
     city:String,
      latitude1:Number,
      longitude1:Number,
-    // bucketlist:[{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Destination"
-    // }],
-    //visited
     purchased:[String]
 }, {
     timestamps: true
@@ -115,68 +102,36 @@ app.get('/signup', (req, res) => {
         res.render("signup", {cities:all});
     });
 })
-// app.post('/signup', (req, res) => {
-//     if(req.body.image.length==0)
-//     {
-//         req.body.image.length=(String)("https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png");
-//     }
-//     //currently working here
-//   //  
-//     // City.findOne({cityname:req.body.city},function(err,returnedcity)
-//     // {
-//     //     if(err){
-//     //         res.send("error");
-//     //         return res.redirect("/");
-//     //     }
-//     //     lat1=returnedcity.latitude;
-//     //     long1=returnedcity.longitude;
-//     // })
-//     var newUser = new User({username: req.body.username, fullname: req.body.name, points:0/*city:req.body.city,latitude1:lat1, longitude1:long1*/,profile:req.body.image});
-//     console.log(req.body.city);
-
-//     User.register(newUser, req.body.password, (err, user) => {
-//         if(err){
-//             console.log(err);
-//             return res.render("signup");
-        
-//             passport.authenticate('local')(req, res, ()=> {
-//             res.redirect('/');
-//             })
-//         }
-//     })
-// })
-
 app.post('/signup', (req, res) => {
     if(req.body.image.length==0)
     {
         req.body.image.length=(String)("https://i.ibb.co/YNzjt8X/Clipart-Key-1461473.png");
     }
-   //currently working here
-   var currentcity=req.body.city;
-   var lat1, long1;
-   City.findOne({cityname:currentcity},function(err,returnedcity)
+   let currentcity=req.body.city; 
+   let lat1="28.222222", long1="78.222222";  
+   City.findOne({cityname:req.body.city},function(err,returnedcity)
     {
-        if(err){
+        if(err)
+        {
             res.send("error");
             return res.redirect("/");
         }
-        console.log(returnedcity.latitude);
         lat1=(returnedcity.latitude);
         long1=(returnedcity.longitude);
-    })
-    var newUser = new User({username: req.body.username, fullname: req.body.name, points:0,city: req.body.city,latitude1:lat1, longitude1:long1, profile:req.body.image});
-    // console.log(req.body.city);
-    User.register(newUser, req.body.password, (err, user) => {
-        if(err){
-            console.log(err);
-            return res.render("signup");
-        }
-        passport.authenticate('local')(req, res, ()=> {
-            res.redirect('/');
+        console.log(lat1);
+        var newUser = new User({username: req.body.username, fullname: req.body.name, points:0,city: req.body.city,latitude1:lat1, longitude1:long1, profile:req.body.image});
+        User.register(newUser, req.body.password, (err, user) => {
+            if(err)
+            {
+                console.log(err);
+                return res.render("signup");
+            }
+            passport.authenticate('local')(req, res, ()=> {
+                res.redirect('/');
+            })
         })
     })
 })
-
 app.get('/login', (req, res) => {
     res.render("login");
 })
@@ -251,27 +206,12 @@ app.post("/addpoints", (req, res)=>{
                                     return res.redirect("/");
                                 }
                                 res.redirect("/logout");
-                    //res.render("addpoints", {data:{returned:returned, mylatitude:req.body.mylatitude, mylongitude:req.body.mylongitude, distance:req.body.distance}});
                     });
                 })
             }
         }
     })
 })
-/*app.get("/explore", function(req, res)
-{
-    res.render("nearby");
-});
-app.post("/explore", (req, res)=>{
-
-    Destination.find({},function(err, all)
-    {
-        if(err)
-        res.send("Error");
-        else
-        res.render("nearbydestinations", {destinations:all});
-    });
-})*/
 app.get("/profile/:username", function(req,res){
     User.findOne({username: req.params.username}, function(err,foundUser){
         if(err){
@@ -295,34 +235,23 @@ app.get("/addnew", function(req, res)
 {
     res.render("addnew.ejs");
 });
-//destinations
 app.post('/products', (req, res)=> {
 
-    //var location=req.body.name;
-   // var city=req.body.city;
-   // var state=req.body.state;
     var productname=req.body.productname;
     var image=req.body.image;
     var points=req.body.points;
-    //var latitude=req.body.latitude;
-    //var longitude=req.body.longitude;
     var uniquename=req.body.uniquename;
     var brand =req.body.brand;
     var category =req.body.category;
     var price = req.body.price;
     console.log(productname);
     var newProduct = new Product({
-        //namelocation:location, 
         productname:productname,
         category:category,
         brand:brand,
         price:price,
-       // city:city, 
-        //state:state, 
         image:image, 
         points:points, 
-        //latitude:latitude, 
-        //longitude:longitude, 
         uniquename:uniquename
     });
     newProduct.save((err, returned)=> {
