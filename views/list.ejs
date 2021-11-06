@@ -1,6 +1,6 @@
 <%- include("partials/header1") %>
 <h3>Products</h3>
-<!--<h4><a href="/addnew">Add a new Destination</a></h4>-->
+<h4><a class="row d-flex justify-content-center btn bgc text-white " style="width: 120px; margin: auto;" href="/addnew">Add a new Product</a></h4>
 <div class="container">
         <div class="row d-flex justify-content-center">
         <% products.forEach(function(pro){%>
@@ -14,6 +14,7 @@
               </div>
             <%});%>            
         </div>
+
         <h4 style="margin-bottom: 100px;"class="row d-flex justify-content-center">Keep Shopping!!</h4>
     </div>
     <%- include("partials/footer1") %>

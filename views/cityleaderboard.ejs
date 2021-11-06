@@ -1,28 +1,7 @@
 <%- include("partials/header1") %>
 <%var c=1;%>
 <%console.log(currentUser)%>
-<!--data.alluser.username-->
-<!--data.cities.cityname-->
-<h1>Leaderboard</h1>
-<div class="overall" style="text-align:center">
-    <label class="dropdown">
-
-        <div class="bgc text-white dd-button">
-          Select City 
-        </div>
-      
-        <input type="checkbox" class="dd-input" id="test">
-        <ul class="dd-menu">
-        <% data.cities.forEach(function(city){%>
-          <li class="divider"></li>
-          <li>
-            <a href="/leaderboard/<%=city.cityname%>"><%=city.cityname%></a>
-          </li>
-          <%});%>
-        </ul>
-      </label>
-    </div>
-
+<h1> <%= home %>'s Leaderboard</h1>
 <ol>
     <div class="d-flex justify-content-center">
         <div class="container">
@@ -34,7 +13,7 @@
             </div>
         </div>
     </div>
-<% data.allusers.forEach(function(singleuser){%>
+<% allusers.forEach(function(singleuser){%>
 <div class="d-flex justify-content-center">
     <div class="container">
         <div style="width:100%;" class="second row d-flex justify-content-center ">
@@ -42,9 +21,13 @@
             <div style="border: 2px solid black;"class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"><a href="/profile/<%=singleuser.username%>"><%=singleuser.username%></a></div>
             <div style="border: 2px solid black;"class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"><%=singleuser.points%></div>
             <div style="border: 2px solid black;"class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"><%=singleuser.city%></div>
+
         </div>
     </div>
 </div>
 <%});%>
+<div style="margin-top:20px;"></div>
+<h4><a class="row d-flex justify-content-center btn bgc text-white " style="margin-top:40px; width: 120px; margin: auto;" href="/leaderboard">See Overall Leaderboard</a></h4>
+
 <h4 class="text-center"style="margin-top:50px;margin-bottom: 100px;">!!Keep Shopping!!</h4>
 <%- include("partials/footer1") %>

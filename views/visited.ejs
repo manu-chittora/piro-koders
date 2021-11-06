@@ -4,7 +4,9 @@
     <div class="container ">
         <div><h1 ><%=data.returned.productname%></h1></div>
         <div class="row d-flex justify-content-center">
-            <img  class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" src="<%=data.returned.image%>">
+            <div class="d-flex justify-content-center col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <img height="300px" width="300px" style="box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; border-radius: 15px;"  src="<%=data.returned.image%>">
+            </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                 
                <!--<div><h4 id="destlat"><%=data.returned.productname%>'s LATITUDE : <%=data.returned.latitude%></h4></div>

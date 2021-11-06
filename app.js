@@ -233,7 +233,7 @@ app.get("/check/:uniquename", isLoggedIn, function(req, res)
 });
 app.get("/addnew", function(req, res)
 {
-    res.render("addnew.ejs");
+    res.render("addnew");
 });
 app.post('/products', (req, res)=> {
 
@@ -274,15 +274,38 @@ app.get("/products/:uniquename", function(req, res)
 });
 app.get("/leaderboard", function(req, res)
 {
-    User.find().sort({points:-1}).exec(
-    function(err, all)
+    User.find().sort({points:-1}).exec(function(err, alluser)
     {
         if(err)
         res.send("Error");
         else
-        res.render("leaderboard", {allusers:all});
+        {
+            City.find({},function(err, all)
+            {
+                if(err)
+                res.send("Error");
+                else
+                res.render("leaderboard", {data:{allusers:alluser, cities:all}});
+            });
+            
+        }
     });
 });
+app.get("/leaderboard/:city", function(req, res)
+{
+
+    User.find({city:req.params.city}).sort({points:-1}).exec(
+
+        function(err, all)
+        {
+            var h=req.params.city;
+            console.log(h);
+            if(err)
+            res.send("Error");
+            else
+            res.render("cityleaderboard", {home:h,allusers:all });
+        });
+})
 /**************/
 //MIDDLEWARE
 /**************/
